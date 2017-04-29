@@ -5,7 +5,7 @@
               [conduit.events]
               [conduit.subs]
               [conduit.routes :as routes]
-              [conduit.views :as views]
+              [conduit.views.core :as views]
               [conduit.config :as config]))
 
 

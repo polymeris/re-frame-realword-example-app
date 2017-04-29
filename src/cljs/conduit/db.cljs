@@ -1,4 +1,3 @@
 (ns conduit.db)
 
-(def default-db
-  {:name "re-frame"})
+(def default-db {})
