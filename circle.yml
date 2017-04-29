@@ -1,3 +1,9 @@
+test:
+  pre:
+    - npm install karma karma-firefox-launcher karma-cljs-test
+    - npm install -g karma-cli
+  override:
+    - lein test
 deployment:
   demo:
     branch: master
