@@ -1,3 +1,3 @@
 (ns conduit.db)
 
-(def default-db {})
+(def default-db {:active-page :home})
