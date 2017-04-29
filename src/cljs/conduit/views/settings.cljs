@@ -1,5 +1,5 @@
 (ns conduit.views.settings
-  (:require [conduit.views.components :refer [input textarea]]))
+  (:require [conduit.views.components :refer [large-input large-textarea]]))
 
 (defn page []
   (let []
@@ -10,9 +10,9 @@
          [:h1.text-xs-center "Your Settings"]
          [:form
           [:fieldset
-           [input {:placeholder "URL of profile picture"}]
-           [input {:placeholder "Your Name"}]
-           [textarea {:placeholder "Short bio about you"}]
-           [input {:placeholder "Email"}]
-           [input {:type :password :placeholder "Password"}]
+           [large-input {:placeholder "URL of profile picture"}]
+           [large-input {:placeholder "Your Name"}]
+           [large-textarea {:placeholder "Short bio about you"}]
+           [large-input {:placeholder "Email"}]
+           [large-input {:type :password :placeholder "Password"}]
            [:button.btn.btn-lg.btn-primary.pull-xs-right "Update Settings"]]]]]])))

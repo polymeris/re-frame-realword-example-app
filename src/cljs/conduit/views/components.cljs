@@ -18,12 +18,22 @@
     [:ul.tag-list
      (map #(do [:li.tag-default.tag-pill.tag-outline %]) tag-list)]]])
 
-(defn textarea
+(defn large-textarea
   [attrs]
   [:fieldset.form-group
    [:textarea.form-control.form-control-lg (merge {:rows 8} attrs)]])
 
-(defn input
+(defn textarea
+  [attrs]
+  [:fieldset.form-group
+   [:textarea.form-control (merge {:rows 8} attrs)]])
+
+(defn large-input
   [attrs]
   [:fieldset.form-group
    [:input.form-control.form-control-lg (merge {:type :text} attrs)]])
+
+(defn input
+  [attrs]
+  [:fieldset.form-group
+   [:input.form-control (merge {:type :text} attrs)]])
