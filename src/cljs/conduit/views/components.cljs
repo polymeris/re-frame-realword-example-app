@@ -1,7 +1,7 @@
 (ns conduit.views.components)
 
 (defn article-preview
-  [{{:keys [username name image]}               :profile
+  [{{:keys [username name image]}                        :profile
     {:keys [date likes slug title description tag-list]} :article}]
   [:div.article-preview
    [:div.article-meta
@@ -17,3 +17,13 @@
     [:span "Read more..."]
     [:ul.tag-list
      (map #(do [:li.tag-default.tag-pill.tag-outline %]) tag-list)]]])
+
+(defn textarea
+  [attrs]
+  [:fieldset.form-group
+   [:textarea.form-control.form-control-lg (merge {:rows 8} attrs)]])
+
+(defn input
+  [attrs]
+  [:fieldset.form-group
+   [:input.form-control.form-control-lg (merge {:type :text} attrs)]])

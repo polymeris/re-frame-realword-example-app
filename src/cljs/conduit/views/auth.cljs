@@ -1,4 +1,5 @@
-(ns conduit.views.auth)
+(ns conduit.views.auth
+  (:require [conduit.views.components :refer [input]]))
 
 (defn page []
   (let []
@@ -12,13 +13,7 @@
           [:ul.error-messages
            [:li "That email is already taken"]]
           [:form
-           [:fieldset.form-group
-            [:input.form-control.form-control-lg {:type :text
-                                                  :placeholder "Your Name"}]]
-           [:fieldset.form-group
-            [:input.form-control.form-control-lg {:type :text
-                                                  :placeholder "Email"}]]
-           [:fieldset.form-group
-            [:input.form-control.form-control-lg {:type :password
-                                                  :placeholder "Password"}]]
+           [input {:placeholder "Your Name"}]
+           [input {:placeholder "Email"}]
+           [input {:type :password :placeholder "Password"}]
            [:buton.btn.btn-lg.btn-primary.pull-xs-right "Sign up"]]]]]])))
