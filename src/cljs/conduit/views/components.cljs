@@ -1,16 +1,21 @@
 (ns conduit.views.components)
 
+(defn article-meta
+  [{{:keys [username name image]} :profile
+    {:keys [date likes]}          :article}]
+  [:div.article-meta
+   [:a {:href (str "#/profile/" username)} [:img {:src image}]]
+   [:div.info
+    [:a.author {:href (str "#/profile/" username)} name]
+    [:span.date date]]
+   [:button.btn.btn-outline-primary.btn-sm.pull-xs-right
+    [:i.ion-heart] " " likes]])
+
 (defn article-preview
-  [{{:keys [username name image]}                        :profile
-    {:keys [date likes slug title description tag-list]} :article}]
+  [{profile                                               :profile
+    {:keys [slug title description tag-list] :as article} :article}]
   [:div.article-preview
-   [:div.article-meta
-    [:a {:href (str "#/profile/" username)} [:img {:src image}]]
-    [:div.info
-     [:a.author {:href (str "#/profile/" username)} name]
-     [:span.date date]]
-    [:button.btn.btn-outline-primary.btn-sm.pull-xs-right
-     [:i.ion-heart] " " likes]]
+   [article-meta {:article article :profile profile}]
    [:a.preview-link {:href (str "#/article/" slug)}
     [:h1 title]
     [:p description]
