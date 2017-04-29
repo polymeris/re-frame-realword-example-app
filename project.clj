@@ -15,6 +15,7 @@
              {:dependencies [[binaryage/devtools "0.8.2"]]
               :plugins      [[lein-figwheel "0.5.9"]
                              [lein-doo "0.1.7"]]}}
+  :aliases {"test" ["with-profile" "test" "doo" "firefox" "test" "once"]}
   :cljsbuild
   {:builds [{:id           "dev"
              :source-paths ["src/cljs"]
@@ -38,4 +39,4 @@
              :compiler     {:main          conduit.runner
                             :output-to     "resources/public/js/compiled/test.js"
                             :output-dir    "resources/public/js/compiled/test/out"
-                            :optimizations :none}}]})
+                            :optimizations :simple}}]})

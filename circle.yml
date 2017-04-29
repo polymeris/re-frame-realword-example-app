@@ -1,0 +1,5 @@
+deployment:
+  demo:
+    branch: master
+    commands:
+      - ./deploy_demo.sh

@@ -5,6 +5,7 @@
 
 ### [Demo](https://polymeris.github.io/re-frame-realword-example-app-demo/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
 
+[![CircleCI](https://circleci.com/gh/polymeris/re-frame-realword-example-app.svg?style=svg)](https://circleci.com/gh/polymeris/re-frame-realword-example-app)
 
 This codebase was created to demonstrate a fully fledged fullstack application built with 
 Clojurescript and re-frame including CRUD operations, authentication, routing, pagination, and more.
