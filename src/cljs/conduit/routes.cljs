@@ -17,12 +17,22 @@
 (defn app-routes []
   (secretary/set-config! :prefix "#")
   (defroute "/" [] (re-frame/dispatch [:set-active-page :home]))
+  (defroute "/home" [] (re-frame/dispatch [:set-active-page :home]))
+  (defroute "/auth" [] (re-frame/dispatch [:set-active-page :auth]))
   (defroute "/login" [] (re-frame/dispatch [:set-active-page :auth]))
   (defroute "/register" [] (re-frame/dispatch [:set-active-page :auth]))
   (defroute "/settings" [] (re-frame/dispatch [:set-active-page :settings]))
   (defroute "/editor" [] (re-frame/dispatch [:set-active-page :editor]))
-  (defroute "/editor/:slug" [slug] (re-frame/dispatch [:edit-article slug]))
-  (defroute "/article/:slug" [slug] (re-frame/dispatch [:view-article slug]))
-  (defroute "/profile/:username" [username] (re-frame/dispatch [:view-profile username]))
-  (defroute "/profile/:username/favorites" [username] (re-frame/dispatch [:view-favorites username]))
+  (defroute "/editor/:slug" [slug]
+            (do (re-frame/dispatch [:set-active-page :editor])
+                (re-frame/dispatch [:set-active-article slug])))
+  (defroute "/article/:slug" [slug]
+            (do (re-frame/dispatch [:set-active-page :article])
+                (re-frame/dispatch [:set-active-article slug])))
+  (defroute "/profile/:username" [username]
+            (do (re-frame/dispatch [:set-active-page :profile])
+                (re-frame/dispatch [:set-active-profile username])))
+  (defroute "/profile/:username/favorites" [username]
+            (do (re-frame/dispatch [:set-active-page :profile])
+                (re-frame/dispatch [:set-active-profile username])))
   (hook-browser-navigation!))
