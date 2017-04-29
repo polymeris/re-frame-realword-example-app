@@ -1,26 +1,11 @@
-(ns conduit.views.home)
+(ns conduit.views.home
+  (:require [conduit.views.components :refer [article-preview]]))
 
 (defn- feed-toggle []
   [:div.feed-toggle
    [:ul.nav.nav-pills.outline-active
     [:li.nav-item [:a.nav-link.disabled {:href ""} "Your Feed"]]
     [:li.nav-item [:a.nav-link.active {:href ""} "Global Feed"]]]])
-
-(defn- article-preview
-  [{{:keys [username name image]}               :profile
-    {:keys [date likes slug title description]} :article}]
-  [:div.article-preview
-   [:div.article-meta
-    [:a {:href (str "#/profile/" username)} [:img {:src image}]]
-    [:div.info
-     [:a.author {:href (str "#/profile/" username)} name]
-     [:span.date date]]
-    [:button.btn.btn-outline-primary.btn-sm.pull-xs-right
-     [:i.ion-heart] " " likes]]
-   [:a.preview-link {:href (str "#/article/" slug)}
-    [:h1 title]
-    [:p description]
-    [:span "Read more..."]]])
 
 (defn- tag-pill
   [{:keys [text]}]
