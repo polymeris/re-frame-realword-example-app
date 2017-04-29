@@ -50,10 +50,10 @@
          [article-meta {:article article :profile profile}]]
         [:div.row
          [:div.col-xs-12.col-md-8.offset-md-2
-          [:form.card.comment-from
+          [:form.card.comment-form
            [:div.card-block]
            [:textarea.form-control {:rows 3 :placeholder "Write a comment..."}]
            [:div.card-footer
             [:img.comment-author-img {:src (:image profile)}]
-            [:button.btn.btn-sm.btn-primary.pull-xs-right "Post Comment"]]]
+            [:button.btn.btn-sm.btn-primary "Post Comment"]]]
           (map comment-card comments)]]]])))

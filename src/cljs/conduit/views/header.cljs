@@ -4,8 +4,9 @@
 (defn- navitem
   [{:keys [icon-class text target]}]
   (let [active-page (re-frame/subscribe [:active-page])]
-    [:li.nav-item {:class (when (= @active-page target) "active")}
-     [:a {:href (str "#/" (name target))}
+    [:li.nav-item
+     [:a.nav-link {:class (when (= @active-page target) "active")
+                   :href  (str "#/" (name target))}
       (when icon-class [:i {:class icon-class} " "])
       text]]))
 
