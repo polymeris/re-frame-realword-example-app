@@ -1,5 +1,6 @@
 (ns conduit.events
     (:require [re-frame.core :as re-frame]
+              [day8.re-frame.http-fx]
               [conduit.db :as db]))
 
 (re-frame/reg-event-db
