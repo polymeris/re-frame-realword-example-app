@@ -5,7 +5,8 @@
                  [re-frame "0.9.2"]
                  [re-frisk "0.3.2"]
                  [secretary "1.2.3"]
-                 [day8.re-frame/http-fx "0.1.3"]]
+                 [day8.re-frame/http-fx "0.1.3"]
+                 [prismatic/dommy "1.1.0"]]
   :plugins [[lein-cljsbuild "1.1.4"]]
   :min-lein-version "2.5.3"
   :source-paths ["src/clj"]
@@ -15,7 +16,7 @@
              {:dependencies [[binaryage/devtools "0.8.2"]
                              [com.cemerick/piggieback "0.2.1"]
                              [figwheel-sidecar "0.5.9"]]
-              :source-paths ["cljs_src" "dev"]
+              :source-paths ["src/cljs" "dev"]
               :plugins      [[lein-figwheel "0.5.9"]
                              [lein-doo "0.1.7"]]}}
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
