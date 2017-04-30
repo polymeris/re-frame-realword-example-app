@@ -12,9 +12,13 @@
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "test/js"]
   :figwheel {:css-dirs ["resources/public/css"]}
   :profiles {:dev
-             {:dependencies [[binaryage/devtools "0.8.2"]]
+             {:dependencies [[binaryage/devtools "0.8.2"]
+                             [com.cemerick/piggieback "0.2.1"]
+                             [figwheel-sidecar "0.5.9"]]
+              :source-paths ["cljs_src" "dev"]
               :plugins      [[lein-figwheel "0.5.9"]
                              [lein-doo "0.1.7"]]}}
+  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
   :aliases {"test" ["with-profile" "test" "doo" "firefox" "test" "once"]}
   :cljsbuild
   {:builds [{:id           "dev"

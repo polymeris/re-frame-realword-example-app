@@ -6,3 +6,4 @@
 /resources/public/js/compiled
 out
 /.lein-*
+/.nrepl-port
