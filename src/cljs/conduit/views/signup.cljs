@@ -1,18 +1,19 @@
-(ns conduit.views.auth
+(ns conduit.views.signup
   (:require [conduit.views.components :refer [large-input]]))
 
 (defn page []
   (let []
     (fn []
-      [:div.auth-page
+      [:div.signup-page
        [:div.container.page
         [:div.row
          [:div.col-md-6.offset-md-3.col-xs-12
-          [:h1.text-xs-center "Log in"]
-          [:p.text-xs-center [:a {:href "#/signup"} "Don't have an account?"]]
+          [:h1.text-xs-center "Sign up"]
+          [:p.text-xs-center [:a {:href "#/auth"} "Have an account?"]]
           [:ul.error-messages
-           [:li "Bad credentials"]]
+           [:li "That email is already taken"]]
           [:form
+           [large-input {:placeholder "Your Name"}]
            [large-input {:placeholder "Email"}]
            [large-input {:type :password :placeholder "Password"}]
-           [:buton.btn.btn-lg.btn-primary.pull-xs-right "Log in"]]]]]])))
+           [:buton.btn.btn-lg.btn-primary.pull-xs-right "Sign up"]]]]]])))

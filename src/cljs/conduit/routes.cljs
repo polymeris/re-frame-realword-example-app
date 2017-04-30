@@ -20,6 +20,7 @@
   (defroute "/home" [] (re-frame/dispatch [:set-active-page :home]))
   (defroute "/auth" [] (re-frame/dispatch [:set-active-page :auth]))
   (defroute "/login" [] (re-frame/dispatch [:set-active-page :auth]))
+  (defroute "/signup" [] (re-frame/dispatch [:set-active-page :signup]))
   (defroute "/register" [] (re-frame/dispatch [:set-active-page :auth]))
   (defroute "/settings" [] (re-frame/dispatch [:set-active-page :settings]))
   (defroute "/editor" [] (re-frame/dispatch [:set-active-page :editor]))

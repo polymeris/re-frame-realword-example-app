@@ -17,4 +17,4 @@
     [navitem {:text "Home" :target :home}]
     [navitem {:icon-class :ion-compose :text "New Post" :target :editor}]
     [navitem {:icon-class :ion-gear-a :text "Settings" :target :settings}]
-    [navitem {:text "Sign up" :target :auth}]]])
+    [navitem {:text "Log in" :target :auth}]]])

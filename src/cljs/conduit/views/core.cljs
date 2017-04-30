@@ -4,6 +4,7 @@
             [conduit.views.footer :refer [footer]]
             [conduit.views.article :as article]
             [conduit.views.auth :as auth]
+            [conduit.views.signup :as signup]
             [conduit.views.editor :as editor]
             [conduit.views.home :as home]
             [conduit.views.profile :as profile]
@@ -13,6 +14,7 @@
   (case page-name
     :home [home/page]
     :auth [auth/page]
+    :signup [signup/page]
     :settings [settings/page]
     :editor [editor/page]
     :article [article/page]
