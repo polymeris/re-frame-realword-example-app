@@ -11,10 +11,16 @@
       text]]))
 
 (defn navbar []
-  [:nav.navbar.navbar-light
-   [:a.navbar-brand {:href "#/"} "conduit"]
-   [:ul.nav.navbar-nav.pull-xs-right
-    [navitem {:text "Home" :target :home}]
-    [navitem {:icon-class :ion-compose :text "New Post" :target :editor}]
-    [navitem {:icon-class :ion-gear-a :text "Settings" :target :settings}]
-    [navitem {:text "Log in" :target :auth}]]])
+  (let [user (re-frame/subscribe [:user])]
+    [:nav.navbar.navbar-light
+     [:a.navbar-brand {:href "#/"} "conduit"]
+     (if @user
+       [:ul.nav.navbar-nav.pull-xs-right
+        [navitem {:text "Home" :target :home}]
+        [navitem {:icon-class :ion-compose :text "New Post" :target :editor}]
+        [navitem {:icon-class :ion-gear-a :text "Settings" :target :settings}]
+        [navitem {:text (:username @user) :target :profile}]
+        [navitem {:text "Log out" :target :logout}]]
+       [:ul.nav.navbar-nav.pull-xs-right
+        [navitem {:text "Log in" :target :login}]
+        [navitem {:text "Sign up" :target :signup}]])]))

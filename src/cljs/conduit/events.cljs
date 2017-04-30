@@ -1,5 +1,5 @@
 (ns conduit.events
-  (:require [re-frame.core :refer [reg-event-db reg-event-fx]]
+  (:require [re-frame.core :refer [reg-event-db reg-event-fx dispatch]]
             [day8.re-frame.http-fx]
             [ajax.core :refer [json-request-format json-response-format]]
             [clojure.string :as string]
@@ -34,7 +34,8 @@
 
 (reg-event-db
   :login-success
-  (fn [db [_ user]]
+  (fn [db [_ {user :user}]]
+    (dispatch [:set-active-page :main])
     (-> db
         (assoc-in [:pending-requests :login!] false)
         (assoc :user user))))
@@ -43,3 +44,35 @@
   :login-failure
   (fn [db _]
     (assoc-in db [:pending-requests :login!] :failed)))
+
+
+(reg-event-db
+  :logout!
+  (fn [db _]
+    (dissoc db :user)))
+
+(reg-event-fx
+  :register!
+  (fn [{:keys [db]} [_ user]]
+    {:db         (assoc-in db [:pending-requests :register!] :pending)
+     :http-xhrio {:method          :post
+                  :uri             (uri "users")
+                  :params          {:user user}
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [:register-success]
+                  :on-failure      [:register-failure]}}))
+
+(reg-event-db
+  :register-success
+  (fn [db [_ {user :user}]]
+    (dispatch [:set-active-page :main])
+    (-> db
+        (assoc-in [:pending-requests :register!] false)
+        (assoc :user user))))
+
+(reg-event-db
+  :register-failure
+  (fn [db _]
+    (assoc-in db [:pending-requests :register!] :failed)))
+
