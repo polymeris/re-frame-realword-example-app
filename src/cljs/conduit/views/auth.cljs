@@ -18,7 +18,7 @@
           [:form
            [large-input {:id "email" :placeholder "Email"}]
            [large-input {:id "password" :type :password :placeholder "Password"}]
-           [:buton.btn.btn-lg.btn-primary.pull-xs-right
+           [:button.btn.btn-lg.btn-primary.pull-xs-right
             {:class    (when (= :pending @logging-in) "disabled")
              :on-click #(re-frame/dispatch [:login! {:email    (.-value (sel1 :#email))
                                                      :password (.-value (sel1 :#password))}])}

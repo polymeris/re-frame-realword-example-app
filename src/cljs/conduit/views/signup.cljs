@@ -19,7 +19,7 @@
            [large-input {:id "username" :placeholder "Your Name"}]
            [large-input {:id "email" :placeholder "Email"}]
            [large-input {:id "password" :type :password :placeholder "Password"}]
-           [:buton.btn.btn-lg.btn-primary.pull-xs-right
+           [:button.btn.btn-lg.btn-primary.pull-xs-right
             {:class    (when (= :pending @signing-up) "disabled")
              :on-click #(re-frame/dispatch [:register! {:username (.-value (sel1 :#username))
                                                         :email    (.-value (sel1 :#email))
