@@ -5,7 +5,7 @@ git clone git@github.com:polymeris/re-frame-realword-example-app-demo.git demo
 cd demo
 cp -R ../resources/public/* .
 git config user.email '<deploy@conduit>'
-git commit --allow-empty 'Update'
+git commit --allow-empty -am 'Update'
 git push
 cd ..
 rm -Rf demo

@@ -76,3 +76,99 @@
   (fn [db _]
     (assoc-in db [:pending-requests :register!] :failed)))
 
+
+(reg-event-fx
+  :get-user
+  (fn [{:keys [db]} [_ user]]
+    {:http-xhrio {:method          :get
+                  :uri             (uri "user")
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [:get-user-success]}}))
+
+(reg-event-db
+  :get-user-success
+  (fn [db [_ user]]
+    (assoc db :user user)))
+
+(reg-event-fx
+  :update-user!
+  (fn [{:keys [db]} user]
+    {:db         (assoc-in db [:pending-requests :update-user!] :pending)
+     :http-xhrio {:method          :put
+                  :uri             (uri "users")
+                  :params          {:user user}
+                  :format          (json-request-format)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [:update-user-success]
+                  :on-failure      [:update-user-failure]}}))
+
+(reg-event-db
+  :update-user-success
+  (fn [db [_ user]]
+    (-> db
+        (assoc-in [:pending-requests :update-user!] false)
+        (assoc :user user))))
+
+(reg-event-db
+  :update-user-failure
+  (fn [db _]
+    (assoc-in db [:pending-requests :update-user!] :failed)))
+
+(reg-event-fx
+  :get-profile
+  (fn [{:keys [db]} username]
+    {:http-xhrio {:method          :get
+                  :uri             (uri "profiles" username)
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [:get-profile-success username]}}))
+
+(reg-event-db
+  :get-profile-success
+  (fn [db [_ username profile]]
+    (assoc-in db [:profiles username] profile)))
+
+(reg-event-fx
+  :follow-profile!
+  (fn [{:keys [db]} username]
+    {:db         (assoc-in db [:pending-requests :follow-profile!] :pending)
+     :http-xhrio {:method          :post
+                  :uri             (uri "profiles" username "follow")
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [:follow-profile-success username]
+                  :on-failure      [:follow-profile-failure username]}}))
+
+(reg-event-db
+  :follow-profile-success
+  (fn [db [_ profile]]
+    (-> db
+        (assoc-in [:pending-requests :follow-profile!] false)
+        ; FIXME add to followers
+        )))
+
+(reg-event-db
+  :follow-profile-failure
+  (fn [db _]
+    (assoc-in db [:pending-requests :follow-profile!] :failed)))
+
+(reg-event-fx
+  :unfollow-profile!
+  (fn [{:keys [db]} username]
+    {:db         (assoc-in db [:pending-requests :unfollow-profile! username] :pending)
+     :http-xhrio {:method          :delete
+                  :uri             (uri "profiles" username "follow")
+                  :response-format (json-response-format {:keywords? true})
+                  :on-success      [:unfollow-profile-success username]
+                  :on-failure      [:unfollow-profile-failure username]}}))
+
+(reg-event-db
+  :unfollow-profile-success
+  (fn [db [_ {username :username}]]
+    (-> db
+        (assoc-in [:pending-requests :unfollow-profile! username] false)
+        ; FIXME add to followers
+        )))
+
+(reg-event-db
+  :unfollow-profile-failure
+  (fn [db [_ {username :username}]]
+    (assoc-in db [:pending-requests :unfollow-profile! username] :failed)))
