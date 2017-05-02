@@ -4,14 +4,15 @@
 (spec/def ::email string?)
 (spec/def ::token string?)
 (spec/def ::username string?)
-(spec/def ::bio string?)
-(spec/def ::image string?)
+(spec/def ::bio (spec/nilable string?))
+(spec/def ::image (spec/nilable string?))
 (spec/def ::following boolean?)
 
 (spec/def ::user (spec/keys :req-un [::email ::token ::username]
-                            :opt-un [::username ::bio ::image]))
+                            :opt-un [::username ::bio ::image ::id]))
 
-(spec/def ::profile (spec/keys :req-un [::email ::token ::username ::bio ::image ::following]))
+(spec/def ::profile (spec/keys :req-un [::email ::username ::bio ::image ::following]
+                               :opt-un [::id ::token]))
 
 (spec/def ::slug string?)
 (spec/def ::title string?)
