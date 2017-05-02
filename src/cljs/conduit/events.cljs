@@ -11,8 +11,7 @@
   (string/join "/" (concat [base-url "api"] path)))
 
 (defn authorization-headers [db]
-  (let [token (get-in db [:user :token])]
-    (if token [:Authorization (str "Token " token)] [])))
+  [:Authorization (str "Token " (get-in db [:user :token]))])
 
 (reg-event-db
   :initialize-db
@@ -26,10 +25,13 @@
 
 (reg-event-db
   :api-request-failure
-  (fn [db [_ & req]]
-    (assoc-in db
-              (into [:pending-requests] (butlast req))
-              [:failed (get-in (last req) [:response :errors])])))
+  (fn [db [_ & q]]
+    (let [request (butlast q)
+          response (last q)]
+      (assoc-in db
+                (into [:pending-requests] request)
+                [:failed (or (get-in response [:response :errors])
+                             {:error [(get response :status-text)]})]))))
 
 (reg-event-fx
   :login!
@@ -131,7 +133,7 @@
 
 (reg-event-fx
   :follow-profile!
-  (fn [{:keys [db]} username]
+  (fn [{:keys [db]} [_ username]]
     {:db         (assoc-in db [:pending-requests :follow-profile! username] :pending)
      :http-xhrio {:method          :post
                   :uri             (uri "profiles" username "follow")
@@ -150,7 +152,7 @@
 
 (reg-event-fx
   :unfollow-profile!
-  (fn [{:keys [db]} username]
+  (fn [{:keys [db]} [_ username]]
     {:db         (assoc-in db [:pending-requests :unfollow-profile! username] :pending)
      :http-xhrio {:method          :delete
                   :uri             (uri "profiles" username "follow")
@@ -187,7 +189,7 @@
 (reg-event-fx
   :create-article!
   (fn [{:keys [db]} [_ article]]
-    {:db         (assoc-in db [:pending-requests :create-article! article] :pending)
+    {:db         (assoc-in db [:pending-requests :create-article!] :pending)
      :http-xhrio {:method          :post
                   :uri             (uri "articles")
                   :headers         (authorization-headers db)
@@ -195,12 +197,12 @@
                   :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [:create-article-success article]
-                  :on-failure      [:api-request-failure :create-article! article]}}))
+                  :on-failure      [:api-request-failure :create-article!]}}))
 
 (reg-event-db
   :create-article-success
-  (fn [db [_ article _]]
-    (assoc-in db [:pending-requests :create-article! article] false)))
+  (fn [db [_ _]]
+    (assoc-in db [:pending-requests :create-article!] false)))
 
 (reg-event-fx
   :update-article!

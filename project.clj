@@ -6,7 +6,8 @@
                  [re-frisk "0.3.2"]
                  [secretary "1.2.3"]
                  [day8.re-frame/http-fx "0.1.3"]
-                 [prismatic/dommy "1.1.0"]]
+                 [prismatic/dommy "1.1.0"]
+                 [cljsjs/react-select "1.0.0-rc.1"]]
   :plugins [[lein-cljsbuild "1.1.4"]]
   :min-lein-version "2.5.3"
   :source-paths ["src/clj"]
@@ -44,4 +45,4 @@
              :compiler     {:main          conduit.runner
                             :output-to     "resources/public/js/compiled/test.js"
                             :output-dir    "resources/public/js/compiled/test/out"
-                            :optimizations :simple}}]})
+                            :optimizations :none}}]})
