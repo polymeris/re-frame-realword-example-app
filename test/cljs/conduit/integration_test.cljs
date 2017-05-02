@@ -1,6 +1,8 @@
-(ns conduit.events-test
+(ns conduit.integration-test
   (:require [cljs.test :refer-macros [deftest testing is async use-fixtures]]
             [re-frame.core :as re-frame :refer [dispatch reg-event-db]]
+            [cljs.spec :as spec]
+            [conduit.schema :as schema]
             [conduit.events]))
 
 (defn fixture-re-frame
@@ -34,7 +36,7 @@
       :register-success
       (fn [_ [_ {:keys [user] :as response}]]
         (print "response was " response)
-        (is (string? (:token user)))
+        (is (spec/valid? ::schema/user user))
         (is (= (select-keys test-user [:username :email])
                (select-keys user [:username :email])))
         (done)))
@@ -55,8 +57,28 @@
       :login-success
       (fn [_ [_ {:keys [user] :as response}]]
         (print "response was " response)
-        (is (string? (:token user)))
+        (is (spec/valid? ::schema/user user))
         (is (= (select-keys test-user [:username :email])
                (select-keys user [:username :email])))
         (done)))
     (dispatch [:login! test-user])))
+
+(deftest get-tags
+  (async done
+    (reg-event-db
+      :get-tags-success
+      (fn [_ [_ {:keys [tags] :as response}]]
+        (print "response was " response)
+        (is (spec/valid? ::schema/tags tags))
+        (done)))
+    (dispatch [:get-tags])))
+
+(deftest create-article-success
+  (async done
+    (reg-event-db
+      :create-article-success
+      (fn [_ [_ {:keys [article] :as response}]]
+        (print "response was " response)
+        (is (spec/valid? ::schema/article tags))
+        (done)))
+    (dispatch [:create-article! {:title "Test article" :}])))
