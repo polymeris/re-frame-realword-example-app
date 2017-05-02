@@ -25,8 +25,10 @@
 
 (reg-event-db
   :api-request-failure
-  (fn [db request]
-    (assoc-in db (conj (rest request) :pending-requests) :failed)))
+  (fn [db [_ & req]]
+    (assoc-in db
+              (into [:pending-requests] (butlast req))
+              [:failed (get-in (last req) [:response :errors])])))
 
 (reg-event-fx
   :login!
@@ -93,10 +95,10 @@
 
 (reg-event-fx
   :update-user!
-  (fn [{:keys [db]} user]
+  (fn [{:keys [db]} [_ user]]
     {:db         (assoc-in db [:pending-requests :update-user!] :pending)
      :http-xhrio {:method          :put
-                  :uri             (uri "users")
+                  :uri             (uri "user")
                   :headers         (authorization-headers db)
                   :params          {:user user}
                   :format          (json-request-format)
