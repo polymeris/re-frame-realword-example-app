@@ -11,15 +11,15 @@
 (spec/def ::user (spec/keys :req-un [::email ::token ::username]
                             :opt-un [::username ::bio ::image ::id]))
 
-(spec/def ::profile (spec/keys :req-un [::email ::username ::bio ::image ::following]
-                               :opt-un [::id ::token]))
+(spec/def ::profile (spec/keys :req-un [::username ::bio ::image ::following]
+                               :opt-un [::email ::id ::token]))
 
 (spec/def ::slug string?)
 (spec/def ::title string?)
-(spec/def ::description string?)
+(spec/def ::description (spec/nilable string?))
 (spec/def ::body string?)
-(spec/def ::createdAt #(instance? js/Date %))
-(spec/def ::updatedAt #(instance? js/Date %))
+(spec/def ::createdAt string?)                              ;TODO coerce to date
+(spec/def ::updatedAt string?)
 (spec/def ::favorited boolean?)
 (spec/def ::favoritesCount (spec/and integer? (comp not neg?)))
 (spec/def ::author ::profile)

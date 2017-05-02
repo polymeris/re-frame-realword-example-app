@@ -10,8 +10,9 @@
 (defn uri [& path]
   (string/join "/" (concat [base-url "api"] path)))
 
-(defn authorization-headers [{{token :token} :user}]
-  (if token [:Authorization (str "Token " token)] []))
+(defn authorization-headers [db]
+  (let [token (get-in db [:user :token])]
+    (if token [:Authorization (str "Token " token)] [])))
 
 (reg-event-db
   :initialize-db
@@ -84,6 +85,7 @@
     {:http-xhrio {:method          :get
                   :uri             (uri "user")
                   :headers         (authorization-headers db)
+                  :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [:get-user-success]
                   :on-failure      [:api-request-failure :get-user]}}))
@@ -134,6 +136,7 @@
      :http-xhrio {:method          :post
                   :uri             (uri "profiles" username "follow")
                   :headers         (authorization-headers db)
+                  :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [:follow-profile-success username]
                   :on-failure      [:api-request-failure :follow-profile! username]}}))
@@ -189,6 +192,7 @@
                   :uri             (uri "articles")
                   :headers         (authorization-headers db)
                   :params          {:article article}
+                  :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [:create-article-success article]
                   :on-failure      [:api-request-failure :create-article! article]}}))

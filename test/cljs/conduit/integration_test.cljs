@@ -3,15 +3,8 @@
             [re-frame.core :as re-frame :refer [dispatch reg-event-db]]
             [cljs.spec :as spec]
             [conduit.schema :as schema]
-            [conduit.events]))
-
-(defn fixture-re-frame
-  []
-  (let [restore-re-frame (atom nil)]
-    {:before #(reset! restore-re-frame (re-frame/make-restore-fn))
-     :after  @restore-re-frame}))
-
-(use-fixtures :each (fixture-re-frame))
+            [conduit.events]
+            [conduit.fixtures :as fixtures]))
 
 (def random-user-number (rand-int 1e9))
 
@@ -19,18 +12,9 @@
                 :email    (str "re-frame-test" random-user-number "@example.com")
                 :password "re-frame-test"})
 
-(print test-user)
+(use-fixtures :each (fixtures/re-frame-state))
 
-(deftest register-failure
-  (async done
-    (reg-event-db
-      :register-failure
-      (fn [_ [_ {status :status}]]
-        (is (not= 200 status))
-        (done)))
-    (dispatch [:register! nil])))
-
-(deftest register-success
+(deftest register
   (async done
     (reg-event-db
       :register-success
@@ -42,16 +26,7 @@
         (done)))
     (dispatch [:register! test-user])))
 
-(deftest login-failure
-  (async done
-    (reg-event-db
-      :login-failure
-      (fn [_ [_ {status :status}]]
-        (is (not= 200 status))
-        (done)))
-    (dispatch [:login! nil])))
-
-(deftest login-success
+(deftest login
   (async done
     (reg-event-db
       :login-success
@@ -72,13 +47,3 @@
         (is (spec/valid? ::schema/tags tags))
         (done)))
     (dispatch [:get-tags])))
-
-(deftest create-article-success
-  (async done
-    (reg-event-db
-      :create-article-success
-      (fn [_ [_ {:keys [article] :as response}]]
-        (print "response was " response)
-        (is (spec/valid? ::schema/article tags))
-        (done)))
-    (dispatch [:create-article! {:title "Test article" :}])))
