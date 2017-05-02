@@ -42,3 +42,9 @@
   [attrs]
   [:fieldset.form-group
    [:input.form-control (merge {:type :text} attrs)]])
+
+(defn error-list
+  [errors]
+  (when errors
+    [:ul.error-messages
+     (map (fn [[k v]] [:li {:key k} (str (name k) " " (first v))]) errors)]))
