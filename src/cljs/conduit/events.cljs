@@ -119,7 +119,7 @@
 
 (reg-event-fx
   :get-profile
-  (fn [{:keys [db]} username]
+  (fn [{:keys [db]} [_ username]]
     {:http-xhrio {:method          :get
                   :uri             (uri "profiles" username)
                   :response-format (json-response-format {:keywords? true})

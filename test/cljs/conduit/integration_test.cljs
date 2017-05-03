@@ -47,3 +47,13 @@
         (is (spec/valid? ::schema/tags tags))
         (done)))
     (dispatch [:get-tags])))
+
+(deftest get-profile
+  (async done
+    (reg-event-db
+      :get-profile-success
+      (fn [_ [_ _ {:keys [profile] :as response}]]
+        (print "response was " response)
+        (is (spec/valid? ::schema/profile profile))
+        (done)))
+    (dispatch [:get-profile (:username test-user)])))

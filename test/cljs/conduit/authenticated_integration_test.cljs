@@ -37,3 +37,23 @@
         (done)))
     (with-login #(dispatch [:create-article! {:title "Test article"
                                               :body  "Never mind me"}]))))
+
+(deftest follow-profile
+  (async done
+    (reg-event-db
+      :follow-profile-success
+      (fn [_ [_ _ {:keys [profile] :as response}]]
+        (print "response was " response)
+        (is (spec/valid? ::schema/profile profile))
+        (done)))
+    (with-login (dispatch [:follow-profile! "re-frame Test User"]))))
+
+(deftest unfollow-profile
+  (async done
+    (reg-event-db
+      :unfollow-profile-success
+      (fn [_ [_ _ {:keys [profile] :as response}]]
+        (print "response was " response)
+        (is (spec/valid? ::schema/profile profile))
+        (done)))
+    (with-login (dispatch [:unfollow-profile! "re-frame Test User"]))))
