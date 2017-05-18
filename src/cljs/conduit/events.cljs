@@ -157,6 +157,7 @@
      :http-xhrio {:method          :delete
                   :uri             (uri "profiles" username "follow")
                   :headers         (authorization-headers db)
+                  :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [:unfollow-profile-success username]
                   :on-failure      [:api-request-failure :unfollow-profile! username]}}))
@@ -170,11 +171,11 @@
 
 (reg-event-fx
   :get-articles
-  (fn [{:keys [db]} [_ {:keys [tag author favorited-by] :as params}]]
+  (fn [{:keys [db]} [_ params]]
     {:db         (assoc-in db [:pending-requests :get-articles params] :pending)
      :http-xhrio {:method          :get
                   :uri             (uri "articles")
-                  :headers         (authorization-headers db)
+                  :params          params
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [:get-articles-success params]
                   :on-failure      [:api-request-failure :get-articles params]}}))

@@ -36,7 +36,8 @@
         (is (spec/valid? ::schema/article article))
         (done)))
     (with-login #(dispatch [:create-article! {:title "Test article"
-                                              :body  "Never mind me"}]))))
+                                              :body  "Never mind me"
+                                              :tags  ["test-tag"]}]))))
 
 (deftest follow-profile
   (async done
@@ -46,7 +47,7 @@
         (print "response was " response)
         (is (spec/valid? ::schema/profile profile))
         (done)))
-    (with-login (dispatch [:follow-profile! "re-frame Test User"]))))
+    (with-login #(dispatch [:follow-profile! "re-frame Test User"]))))
 
 (deftest unfollow-profile
   (async done
@@ -56,4 +57,4 @@
         (print "response was " response)
         (is (spec/valid? ::schema/profile profile))
         (done)))
-    (with-login (dispatch [:unfollow-profile! "re-frame Test User"]))))
+    (with-login #(dispatch [:unfollow-profile! "re-frame Test User"]))))
