@@ -57,3 +57,43 @@
         (is (spec/valid? ::schema/profile profile))
         (done)))
     (dispatch [:get-profile (:username test-user)])))
+
+(deftest get-articles-simple
+  (async done
+    (reg-event-db
+      :get-articles-success
+      (fn [_ [_ params {:keys [articles] :as response}]]
+        (print "with" params "response was " response)
+        (is (spec/valid? ::schema/articles articles))
+        (done)))
+    (dispatch [:get-articles {:limit 3}])))
+
+(deftest get-articles-by-tag
+  (async done
+    (reg-event-db
+      :get-articles-success
+      (fn [_ [_ params {:keys [articles] :as response}]]
+        (print "with" params "response was " response)
+        (is (spec/valid? ::schema/articles articles))
+        (done)))
+    (dispatch [:get-articles {:tag "test-tag" :limit 3}])))
+
+(deftest get-articles-by-author
+  (async done
+    (reg-event-db
+      :get-articles-success
+      (fn [_ [_ params {:keys [articles] :as response}]]
+        (print "with" params "response was " response)
+        (is (spec/valid? ::schema/articles articles))
+        (done)))
+    (dispatch [:get-articles {:author "re-frame Test User" :limit 3}])))
+
+(deftest get-articles-by-favorited
+  (async done
+    (reg-event-db
+      :get-articles-success
+      (fn [_ [_ params {:keys [articles] :as response}]]
+        (print "with" params "response was " response)
+        (is (spec/valid? ::schema/articles articles))
+        (done)))
+    (dispatch [:get-articles {:favorited "re-frame Test User" :limit 3}])))
