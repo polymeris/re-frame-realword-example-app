@@ -10,21 +10,16 @@
 
 (defn- tag-pill
   [{:keys [text]}]
-  [:a.tag-pill.tag-default {:href ""} text])
+  [:a.tag-pill.tag-default {:key text :href ""} text])
 
 (defn sidebar []
-  [:div.sidebar
-   [:p "Popular Tags"]
-   (->> ["programming"
-         "javascript"
-         "emberjs"
-         "angularjs"
-         "react"
-         "mean"
-         "node"
-         "rails"]
-        (map #(do [tag-pill {:text %}]))
-        (into [:div.tag-list]))])
+  (let [popular-tags (re-frame/subscribe [:popular-tags])]
+    [:div.sidebar
+     [:p "Popular Tags"]
+     (->> @popular-tags
+          (sort)
+          (map #(do [tag-pill {:text %}]))
+          (into [:div.tag-list]))]))
 
 (defn page []
   (let [articles (re-frame/subscribe [:articles])]

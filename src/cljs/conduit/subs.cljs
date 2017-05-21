@@ -44,3 +44,15 @@
                   (if (t/before? createdAt (t/minus (t/now) (t/days 1)))
                     (f/unparse (f/formatter "EEE, dd MMM YYYY") createdAt)
                     (humanize/datetime createdAt))))))))
+
+(reg-sub
+  :popular-tags
+  (fn [db _]
+    (->> (get-in db [:articles nil])
+         (map :tagList)
+         (flatten)
+         (frequencies)
+         (sort-by second)
+         (map first)
+         (reverse)
+         (take 16))))
