@@ -17,7 +17,6 @@
         [:div.row
          [:div.col-md-10.offset-md-1.col-xs-12
           [error-list @create-article-errors]
-          [:span @selected-tags]
           [:form
            [:fieldset
             [large-input {:id "title" :placeholder "Article Title"}]

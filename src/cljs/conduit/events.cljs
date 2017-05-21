@@ -3,6 +3,7 @@
             [day8.re-frame.http-fx]
             [ajax.core :refer [json-request-format json-response-format]]
             [clojure.string :as string]
+            [cljs-time.format :as f]
             [conduit.db :as db]))
 
 (def base-url "https://conduit.productionready.io")
@@ -180,12 +181,14 @@
                   :on-success      [:get-articles-success params]
                   :on-failure      [:api-request-failure :get-articles params]}}))
 
+
 (reg-event-db
   :get-articles-success
   (fn [db [_ params {articles :articles}]]
-    (-> db
+    (let [articles (map #(update % :createdAt (partial f/parse (:date-time f/formatters))) articles)]
+      (-> db
         (assoc-in [:pending-requests :get-articles params] false)
-        (assoc-in [:articles params] articles))))
+        (assoc-in [:articles params] articles)))))
 
 (reg-event-fx
   :create-article!

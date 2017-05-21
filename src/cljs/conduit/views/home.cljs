@@ -1,5 +1,6 @@
 (ns conduit.views.home
-  (:require [conduit.views.components :refer [article-preview]]))
+  (:require [conduit.views.components :refer [article-preview]]
+            [re-frame.core :as re-frame]))
 
 (defn- feed-toggle []
   [:div.feed-toggle
@@ -26,7 +27,8 @@
         (into [:div.tag-list]))])
 
 (defn page []
-  (let []
+  (let [articles (re-frame/subscribe [:articles])]
+    (re-frame/dispatch [:get-articles])
     (fn []
       [:div.home-page
        [:div.banner
@@ -36,13 +38,6 @@
         [:div.row
          [:div.col-md-9
           [feed-toggle]
-          [article-preview {:profile {:username "esimons"
-                                      :name     "Eric Simmons"
-                                      :image    "http://i.imgur.com/Qr71crq.jpg"}
-                            :article {:likes       29
-                                      :slug        "how-to-build"
-                                      :date        "January 20th"
-                                      :title       "How to build webapps that scale"
-                                      :description "This is the description for the post."}}]]
+          (map article-preview @articles)]
          [:div.col-md-3
           [sidebar]]]]])))

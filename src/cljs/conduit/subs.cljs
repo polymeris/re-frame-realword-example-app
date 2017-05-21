@@ -1,6 +1,10 @@
 (ns conduit.subs
   (:require-macros [reagent.ratom :refer [reaction]])
-  (:require [re-frame.core :refer [reg-sub]]))
+  (:require [re-frame.core :refer [reg-sub]]
+            [cljs-time.core :as t]
+            [cljs-time.coerce :as c]
+            [cljs-time.format :as f]
+            [clojure.contrib.humanize :as humanize]))
 
 (reg-sub
   :active-page
@@ -29,3 +33,14 @@
   :tags
   (fn [db _]
     (:tags db)))
+
+(reg-sub
+  :articles
+  (fn [db _]
+    (->> (get-in db [:articles nil])
+         (map (fn [{:keys [createdAt] :as article}]
+                (assoc article
+                  :date
+                  (if (t/before? createdAt (t/minus (t/now) (t/days 1)))
+                    (f/unparse (f/formatter "EEE, dd MMM YYYY") createdAt)
+                    (humanize/datetime createdAt))))))))
