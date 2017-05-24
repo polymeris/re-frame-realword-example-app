@@ -20,17 +20,17 @@
        [:i.ion-trash-a]])]])
 
 (defn page []
-  (let [article @(re-frame/subscribe [:active-article])]
+  (let [article (re-frame/subscribe [:active-article])]
     (fn []
       [:div.article-page
        [:div.banner
         [:div.container
-         [:h1 (:title article)]
-         [article-meta article]]]
+         [:h1 (:title @article)]
+         [article-meta @article]]]
        [:div.container.page
         [:div.row.article-content
          [:div.col-md-12
-          [:p (:body article)]]]
+          [:p (:body @article)]]]
         [:hr]
         [:div.row
          [:div.col-xs-12.col-md-8.offset-md-2
@@ -38,6 +38,6 @@
            [:div.card-block]
            [:textarea.form-control {:rows 3 :placeholder "Write a comment..."}]
            [:div.card-footer
-            [:img.comment-author-img {:src (get-in article [:author :image])}]
+            [:img.comment-author-img {:src (get-in @article [:author :image])}]
             [:button.btn.btn-sm.btn-primary "Post Comment"]]]
-          (map comment-card (:comments article))]]]])))
+          (map comment-card (:comments @article))]]]])))
