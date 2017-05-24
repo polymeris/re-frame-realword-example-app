@@ -178,22 +178,22 @@
 (reg-event-fx
   :get-articles
   (fn [{:keys [db]} [_ params]]
-    {:db         (assoc-in db [:pending-requests :get-articles params] :pending)
+    {:db         (assoc-in db [:pending-requests :get-articles] :pending)
      :http-xhrio {:method          :get
                   :uri             (uri "articles")
                   :params          params
                   :response-format (json-response-format {:keywords? true})
-                  :on-success      [:get-articles-success params]
-                  :on-failure      [:api-request-failure :get-articles params]}}))
+                  :on-success      [:get-articles-success]
+                  :on-failure      [:api-request-failure :get-articles]}}))
 
 
 (reg-event-db
   :get-articles-success
-  (fn [db [_ params {articles :articles}]]
+  (fn [db [_ {articles :articles}]]
     (let [articles (map #(update % :createdAt (partial f/parse (:date-time f/formatters))) articles)]
       (-> db
-        (assoc-in [:pending-requests :get-articles params] false)
-        (assoc-in [:articles params] articles)))))
+          (assoc-in [:pending-requests :get-articles] false)
+          (assoc :articles (into {} (map (juxt :slug identity) articles)))))))
 
 (reg-event-fx
   :create-article!
@@ -282,14 +282,21 @@
 
 (reg-event-fx
   :get-comments
-  (fn [{:keys [db]} [_ article]]
-    {:db         (assoc-in db [:pending-requests :get-comments article] :pending)
+  (fn [{:keys [db]} [_ {slug :slug}]]
+    {:db         (assoc-in db [:pending-requests :get-comments slug] :pending)
      :http-xhrio {:method          :get
-                  :uri             (uri "articles" (:slug article) "comments")
+                  :uri             (uri "articles" slug "comments")
                   :headers         (authorization-headers db)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success      [:get-comments-success article]
-                  :on-failure      [:api-request-failure :get-comments article]}}))
+                  :on-success      [:get-comments-success slug]
+                  :on-failure      [:api-request-failure :get-comments slug]}}))
+
+(reg-event-db
+  :get-comments-success
+  (fn [db [_ slug {comments :comments}]]
+    (-> db
+        (assoc-in [:pending-requests :get-comments slug] false)
+        (assoc-in [:articles slug :comments] comments))))
 
 (reg-event-fx
   :delete-comment!
