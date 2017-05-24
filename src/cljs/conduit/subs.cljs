@@ -34,16 +34,26 @@
   (fn [db _]
     (:tags db)))
 
+(defn humanize-date-article [{:keys [createdAt] :as article}]
+  (assoc article
+    :date
+    (if (t/before? createdAt (t/minus (t/now) (t/days 1)))
+      (f/unparse (f/formatter "EEE, dd MMM YYYY") createdAt)
+      (humanize/datetime createdAt))))
+
 (reg-sub
   :articles
   (fn [db _]
     (->> (get-in db [:articles nil])
-         (map (fn [{:keys [createdAt] :as article}]
-                (assoc article
-                  :date
-                  (if (t/before? createdAt (t/minus (t/now) (t/days 1)))
-                    (f/unparse (f/formatter "EEE, dd MMM YYYY") createdAt)
-                    (humanize/datetime createdAt))))))))
+         (map humanize-date-article))))
+
+(reg-sub
+  :active-article
+  (fn [db _]
+    (->> (get-in db [:articles nil])
+         (filter #(= (:slug %) (:active-article db)))
+         (first)
+         (humanize-date-article))))
 
 (reg-sub
   :popular-tags

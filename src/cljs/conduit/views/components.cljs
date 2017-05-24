@@ -1,15 +1,15 @@
 (ns conduit.views.components)
 
 (defn article-meta
-  [{date  :date
-    likes :likes
-    favorites-count :favoritesCount
+  [{created-at                        :date
+    likes                             :likes
+    favorites-count                   :favoritesCount
     {username :username image :image} :author}]
   [:div.article-meta
    [:a {:href (str "#/profile/" username)} [:img {:src image}]]
    [:div.info
     [:a.author {:href (str "#/profile/" username)} username]
-    [:span.date date]]
+    [:span.date created-at]]
    [:button.btn.btn-outline-primary.btn-sm.pull-xs-right
     [:i.ion-heart] (str " " favorites-count) likes]])
 

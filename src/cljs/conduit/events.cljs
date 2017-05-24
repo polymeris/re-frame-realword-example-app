@@ -25,6 +25,11 @@
     (assoc db :active-page active-panel)))
 
 (reg-event-db
+  :set-active-article
+  (fn [db [_ active-article]]
+    (assoc db :active-article active-article)))
+
+(reg-event-db
   :api-request-failure
   (fn [db [_ & q]]
     (let [request (butlast q)
