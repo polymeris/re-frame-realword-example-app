@@ -1,5 +1,6 @@
 (ns conduit.views.article
   (:require [conduit.views.components :refer [article-meta]]
+            [markdown.core :as markdown]
             [re-frame.core :as re-frame]))
 
 (defn- comment-card [{date :date body :body {:keys [username image]} :author}]
@@ -7,7 +8,7 @@
         mod-options (= (:username @user) username)]
     [:div.card
      [:div.card-block
-      [:p.card-text body]]
+      [:p.card-text {:dangerouslySetInnerHTML {:__html (markdown/md->html body)}}]]
      [:div.card-footer
       [:a.comment-author {:href (str "#/profile" username)}
        [:img.comment-author-img {:src image}]]
@@ -15,7 +16,7 @@
       [:a.comment-author {:href (str "#/profile" username)} username]
       [:span.date-posted date]
       (when mod-options
-        [:span.mod-options
+         [:span.mod-options
          [:i.ion-edit]
          [:i.ion-trash-a]])]]))
 
@@ -46,6 +47,6 @@
        [:div.container.page
         [:div.row.article-content
          [:div.col-md-12
-          [:p (:body @article)]]]
+          [:p {:dangerouslySetInnerHTML {:__html (markdown/md->html (:body @article))}}]]]
         [:hr]
         [comments @article]]])))

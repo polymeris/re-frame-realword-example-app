@@ -9,7 +9,8 @@
                  [prismatic/dommy "1.1.0"]
                  [cljsjs/react-select "1.0.0-rc.1"]
                  [com.andrewmcveigh/cljs-time "0.4.0"]
-                 [clojure-humanize "0.2.2"]]
+                 [clojure-humanize "0.2.2"]
+                 [markdown-clj "0.9.99"]]
   :plugins [[lein-cljsbuild "1.1.4"]]
   :min-lein-version "2.5.3"
   :source-paths ["src/clj"]
