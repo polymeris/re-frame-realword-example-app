@@ -4,18 +4,20 @@
 
 (defn- user-info
   [{:keys [image bio username follower-count]}]
-  [:div.user-info
-   [:div.container
-    [:div.row
-     [:div.col-xs-12.col-md-10.offset-md-1
-      [:img.user-img {:src image}]
-      [:h4 username]
-      [:p bio]
-      [:button.btn.btn-sm.btn-outline-secondary.action-btn
-       [:i.ion-plus-round]
-       (str " Follow " username " ")
-       ;[:span.counter (str "(" follower-count ")")]
-       ]]]]])
+  (let [logged-in-user (re-frame/subscribe [:user])]
+    [:div.user-info
+     [:div.container
+      [:div.row
+       [:div.col-xs-12.col-md-10.offset-md-1
+        [:img.user-img {:src image}]
+        [:h4 username]
+        [:p bio]
+        (when (and @logged-in-user (not= (:username @logged-in-user) username))
+          [:button.btn.btn-sm.btn-outline-secondary.action-btn
+           [:i.ion-plus-round]
+           (str " Follow " username " ")
+           ;[:span.counter (str "(" follower-count ")")]
+           ])]]]]))
 
 (defn- article-toggle []
   [:div.articles-toggle
