@@ -296,7 +296,6 @@
     {:db         (assoc-in db [:pending-requests :get-comments slug] :pending)
      :http-xhrio {:method          :get
                   :uri             (uri "articles" slug "comments")
-                  :headers         (authorization-headers db)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [:get-comments-success slug]
                   :on-failure      [:api-request-failure :get-comments slug]}}))
