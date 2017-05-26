@@ -30,6 +30,11 @@
     (assoc db :active-article active-article)))
 
 (reg-event-db
+  :set-active-profile
+  (fn [db [_ active-profile]]
+    (assoc db :active-profile active-profile)))
+
+(reg-event-db
   :api-request-failure
   (fn [db [_ & q]]
     (let [request (butlast q)
@@ -122,6 +127,11 @@
     (-> db
         (assoc-in [:pending-requests :update-user!] false)
         (assoc :user user))))
+
+(reg-event-fx
+  :update-active-profile
+  (fn [{:keys [db]} _]
+    {:dispatch [:get-profile (:active-profile db)]}))
 
 (reg-event-fx
   :get-profile

@@ -19,7 +19,7 @@
         [navitem {:text "Home" :target :home}]
         [navitem {:icon-class :ion-compose :text "New Post" :target :editor}]
         [navitem {:icon-class :ion-gear-a :text "Settings" :target :settings}]
-        [navitem {:text (:username @user) :target :profile}]
+        [navitem {:text (:username @user) :target (str "profile/" (:username @user))}]
         [navitem {:text "Log out" :target :logout}]]
        [:ul.nav.navbar-nav.pull-xs-right
         [navitem {:text "Log in" :target :login}]

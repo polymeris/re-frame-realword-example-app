@@ -59,6 +59,12 @@
          (humanize-article))))
 
 (reg-sub
+  :active-profile
+  (fn [db _]
+    (or (get-in db [:profiles (:active-profile db)])
+        {:username (:active-profile db)})))
+
+(reg-sub
   :popular-tags
   (fn [db _]
     (->> (get-in db [:articles nil])
