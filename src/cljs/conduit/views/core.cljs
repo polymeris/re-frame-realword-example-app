@@ -22,9 +22,12 @@
     [home/page]))
 
 (defn main-panel []
-  (let [active-panel (re-frame/subscribe [:active-page])]
+  (let [active-panel (re-frame/subscribe [:active-page])
+        requests-pending (re-frame/subscribe [:pending-requests])
+        any-request-pending (re-frame/subscribe [:any-request-pending])]
     (fn []
       [:div
        [header/navbar]
+       (when @any-request-pending [:div.loading-bar [:div.loading-progress]])
        [page @active-panel]
        [footer/footer]])))

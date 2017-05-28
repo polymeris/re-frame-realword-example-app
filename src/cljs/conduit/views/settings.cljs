@@ -20,10 +20,11 @@
          [components/large-input {:id "email" :placeholder "Email" :default-value (:email @user)}]
          [components/large-input {:id "password" :type :password :placeholder "Password"}]
          [:button.btn.btn-lg.btn-primary.pull-xs-right
-          {:class    (when @update-pending "disabled loading")
+          {:class    (when @update-pending "disabled")
            :on-click #(re-frame/dispatch [:update-user! {:image    (.-value (sel1 :#image))
                                                          :username (.-value (sel1 :#username))
                                                          :bio      (.-value (sel1 :#bio))
                                                          :email    (.-value (sel1 :#email))
                                                          :password (.-value (sel1 :#password))}])}
+          (when @update-pending [:i.ion-load-a.spin-icon])
           "Update Settings"]]]]]]))

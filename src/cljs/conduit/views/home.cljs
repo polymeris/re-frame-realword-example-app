@@ -25,6 +25,7 @@
           (into [:div.tag-list]))]))
 
 (defn page []
+  (re-frame/dispatch [:get-tags])
   (let [articles (re-frame/subscribe [:articles])]
     (re-frame/dispatch [:get-articles])
     (fn []

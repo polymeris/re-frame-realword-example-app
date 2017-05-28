@@ -1,0 +1,40 @@
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-icon::before {
+    animation: spin 1s infinite linear;
+}
+
+.btn i {
+    margin-right: 0.25em;
+}
+
+@keyframes bounce {
+    from {
+        margin-left: -100%;
+    }
+    to {
+        margin-left: 100%;
+    }
+}
+
+.loading-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    background-color: white;
+}
+
+.loading-progress {
+    background-color: #5CB85C;
+    height: 3px;
+    width: 100%;
+    animation: bounce 1.5s infinite linear;
+}

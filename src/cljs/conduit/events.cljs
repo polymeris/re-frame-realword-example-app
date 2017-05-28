@@ -30,6 +30,21 @@
     (assoc db :active-article active-article)))
 
 (reg-event-db
+  :set-article-tag-filter
+  (fn [db [_ tag]]
+    (assoc-in db [:article-filters :tags] [tag])))
+
+(reg-event-db
+  :add-article-tag-filter
+  (fn [db [_ tag]]
+    (update-in db [:article-filters :tags] conj tag)))
+
+(reg-event-db
+  :clear-article-tag-filter
+  (fn [db [_ tag]]
+    (assoc-in db [:article-filters :tags] [])))
+
+(reg-event-db
   :set-active-profile
   (fn [db [_ active-profile]]
     (assoc db :active-profile active-profile)))

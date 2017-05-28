@@ -25,6 +25,13 @@
     (= :pending (get-in db (into [:pending-requests] query)))))
 
 (reg-sub
+  :any-request-pending
+  (fn [db [_]]
+    (->> (get db :pending-requests)
+         (tree-seq map? vals)
+         (some #(= % :pending)))))
+
+(reg-sub
   :user
   (fn [db _]
     (:user db)))
@@ -79,4 +86,6 @@
          (sort-by second)
          (map first)
          (reverse)
-         (take 16))))
+         (take 16)
+         (concat (:tags db))
+         (set))))

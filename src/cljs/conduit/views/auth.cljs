@@ -17,7 +17,8 @@
          [large-input {:id "email" :placeholder "Email"}]
          [large-input {:id "password" :type :password :placeholder "Password"}]
          [:button.btn.btn-lg.btn-primary.pull-xs-right
-          {:class    (when @login-pending "disabled loading")
+          {:class    (when @login-pending "disabled")
            :on-click #(re-frame/dispatch [:login! {:email    (.-value (sel1 :#email))
                                                    :password (.-value (sel1 :#password))}])}
+          (when @login-pending [:i.ion-load-a.spin-icon])
           "Log in"]]]]]]))

@@ -36,10 +36,11 @@
                                          (reset! selected-tags)))}]]
             [:button.btn.btn-lg.pull-xs-right.btn-primary
              {:type     :button
-              :class    (when @create-article-pending "disabled loading")
+              :class    (when @create-article-pending "disabled")
               :on-click #(re-frame/dispatch [:create-article!
                                              {:title       (.-value (sel1 :#title))
                                               :description (.-value (sel1 :#description))
                                               :body        (.-value (sel1 :#body))
                                               :tagList     @selected-tags}])}
+             (when @create-article-pending [:i.ion-load-a.spin-icon])
              "Publish Article"]]]]]]])))

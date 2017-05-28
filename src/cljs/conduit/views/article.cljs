@@ -42,17 +42,22 @@
     favorited                         :favorited
     slug                              :slug
     {username :username image :image} :author}]
-  (let [logged-in? (re-frame/subscribe [:logged-in?])]
+  (let [logged-in? (re-frame/subscribe [:logged-in?])
+        unfavorite-pending (re-frame/subscribe [:request-pending :unfavorite-article! slug])
+        favorite-pending (re-frame/subscribe [:request-pending :favorite-article! slug])]
     [:div.article-meta
      [:a {:href (str "#/profile/" username)} [:img {:src image}]]
      [:div.info
       [:a.author {:href (str "#/profile/" username)} username]
       [:span.date created-at]]
-     [:a.btn.btn-sm.pull-xs-right
+     [:a.btn.btn-sm.pull-xs-right.loading
       {:class    (if favorited "btn-primary" "btn-outline-primary")
        :href     (if @logged-in? "#" "#/login")
        :on-click #(when @logged-in? (re-frame/dispatch [(if favorited :unfavorite-article! :favorite-article!) slug]))}
-      [:i.ion-heart] (str " " favorites-count) likes]]))
+      [:i {:class (if (or @unfavorite-pending @favorite-pending)
+                    "ion-load-a spin-icon"
+                    "ion-heart")}]
+      favorites-count likes]]))
 
 (defn article-preview
   [{:keys [slug title description tag-list author] :as article}]
