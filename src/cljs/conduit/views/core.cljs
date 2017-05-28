@@ -23,7 +23,6 @@
 
 (defn main-panel []
   (let [active-panel (re-frame/subscribe [:active-page])
-        requests-pending (re-frame/subscribe [:pending-requests])
         any-request-pending (re-frame/subscribe [:any-request-pending])]
     (fn []
       [:div
