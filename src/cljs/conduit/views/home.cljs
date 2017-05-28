@@ -2,6 +2,10 @@
   (:require [conduit.views.article :as article]
             [re-frame.core :as re-frame]))
 
+;TODO paginate articles
+;TODO filter by tag
+;TODO show your feed
+
 (defn- feed-toggle []
   (let [logged-in? (re-frame/subscribe [:logged-in?])]
     [:div.feed-toggle

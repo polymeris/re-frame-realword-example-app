@@ -2,6 +2,12 @@
   (:require [markdown.core :as markdown]
             [re-frame.core :as re-frame]))
 
+; TODO favorite articles
+; TODO delete articles
+; TODO new comments
+; TODO edit comment
+; TODO delete comment
+
 (defn- comment-card [{date :date body :body {:keys [username image]} :author}]
   (let [user (re-frame/subscribe [:user])
         mod-options (= (:username @user) username)]

@@ -2,6 +2,10 @@
   (:require [conduit.views.article :as article]
             [re-frame.core :as re-frame]))
 
+; TODO follow user
+; TODO list articles
+; TODO list favorites
+
 (defn- user-info
   [{:keys [image bio username follower-count]}]
   (let [logged-in-user (re-frame/subscribe [:user])]

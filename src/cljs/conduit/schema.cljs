@@ -18,7 +18,7 @@
 (spec/def ::title string?)
 (spec/def ::description (spec/nilable string?))
 (spec/def ::body string?)
-(spec/def ::createdAt string?)                              ;TODO coerce to date
+(spec/def ::createdAt string?)
 (spec/def ::updatedAt string?)
 (spec/def ::favorited boolean?)
 (spec/def ::favoritesCount (spec/and integer? (comp not neg?)))

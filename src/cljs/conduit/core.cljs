@@ -8,6 +8,8 @@
               [conduit.views.core :as views]
               [conduit.config :as config]))
 
+; TODO code documentation
+; TODO delete integration tests
 
 (defn dev-setup []
   (when config/debug?

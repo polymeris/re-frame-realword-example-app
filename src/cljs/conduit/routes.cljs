@@ -6,6 +6,8 @@
             [goog.history.EventType :as EventType]
             [re-frame.core :as re-frame]))
 
+; TODO dispatch route events via secretary
+
 (defn hook-browser-navigation! []
   (doto (History.)
     (events/listen

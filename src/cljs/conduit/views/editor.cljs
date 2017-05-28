@@ -5,6 +5,9 @@
             [cljsjs.react-select]
             [reagent.core :as r]))
 
+;TODO new article
+;TODO edit article
+
 (defn page []
   (re-frame/dispatch [:get-tags])
   (let [tags (re-frame/subscribe [:tags])
