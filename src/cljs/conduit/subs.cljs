@@ -49,9 +49,10 @@
 (defn humanize-article [{:keys [createdAt] :as article}]
   (assoc article
     :date
-    (if (t/before? createdAt (t/minus (t/now) (t/days 1)))
-      (f/unparse (f/formatter "EEE, dd MMM YYYY") createdAt)
-      (humanize/datetime createdAt))))
+    (let [creation-date (f/parse (:date-time f/formatters) createdAt)]
+      (if (t/before? creation-date (t/minus (t/now) (t/days 1)))
+        (f/unparse (f/formatter "EEE, dd MMM YYYY") creation-date)
+        (humanize/datetime creation-date)))))
 
 (defn filter-articles [params articles]
   articles)

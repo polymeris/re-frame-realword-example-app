@@ -59,7 +59,8 @@
      [:a.btn.btn-sm.pull-xs-right.loading
       {:class    (if favorited "btn-primary" "btn-outline-primary")
        :href     (if @logged-in? "#" "#/login")
-       :on-click #(when @logged-in? (re-frame/dispatch [(if favorited :unfavorite-article! :favorite-article!) slug]))}
+       :on-click #(when @logged-in? (re-frame/dispatch [(if favorited :unfavorite-article! :favorite-article!) slug])
+                                    (.preventDefault %))}   ;avoid jumping to the top due to "#" href
       [:i {:class (if (or @unfavorite-pending @favorite-pending)
                     "ion-load-a spin-icon"
                     "ion-heart")}]

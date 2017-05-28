@@ -220,14 +220,12 @@
                   :on-success      [:get-articles-success]
                   :on-failure      [:api-request-failure :get-articles]}}))
 
-
 (reg-event-db
   :get-articles-success
   (fn [db [_ {articles :articles}]]
-    (let [articles (map #(update % :createdAt (partial f/parse (:date-time f/formatters))) articles)]
-      (-> db
-          (assoc-in [:pending-requests :get-articles] false)
-          (assoc :articles (into {} (map (juxt :slug identity) articles)))))))
+    (-> db
+        (assoc-in [:pending-requests :get-articles] false)
+        (assoc :articles (into {} (map (juxt :slug identity) articles))))))
 
 (reg-event-fx
   :create-article!
@@ -287,16 +285,17 @@
      :http-xhrio {:method          :post
                   :uri             (uri "articles" slug "favorite")
                   :headers         (authorization-headers db)
+                  :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [:favorite-article-success slug]
                   :on-failure      [:api-request-failure :favorite-article! slug]}}))
 
 (reg-event-db
   :favorite-article-success
-  (fn [db [_ slug article]]
-    (->> db
-         (assoc-in [:articles slug] article)
-         (assoc-in [:pending-requests :favorite-article! slug] false))))
+  (fn [db [_ slug {article :article}]]
+    (-> db
+        (assoc-in [:articles slug] article)
+        (assoc-in [:pending-requests :favorite-article! slug] false))))
 
 (reg-event-fx
   :unfavorite-article!
@@ -305,16 +304,17 @@
      :http-xhrio {:method          :delete
                   :uri             (uri "articles" slug "favorite")
                   :headers         (authorization-headers db)
+                  :format          (json-request-format)
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [:unfavorite-article-success slug]
                   :on-failure      [:api-request-failure :unfavorite-article! slug]}}))
 
 (reg-event-db
   :unfavorite-article-success
-  (fn [db [_ slug article]]
-    (->> db
-         (assoc-in [:articles slug] article)
-         (assoc-in [:pending-requests :unfavorite-article! slug] false))))
+  (fn [db [_ slug {article :article}]]
+    (-> db
+        (assoc-in [:articles slug] article)
+        (assoc-in [:pending-requests :unfavorite-article! slug] false))))
 
 (reg-event-fx
   :post-comment!
