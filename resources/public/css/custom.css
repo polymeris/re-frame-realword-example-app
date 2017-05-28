@@ -17,10 +17,10 @@
 
 @keyframes bounce {
     from {
-        margin-left: -100%;
+        transform: translate(-100%);
     }
     to {
-        margin-left: 100%;
+        transform: translate(100%);
     }
 }
 
