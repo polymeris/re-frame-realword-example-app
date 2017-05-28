@@ -242,14 +242,14 @@
 
 (reg-event-fx
   :delete-article!
-  (fn [{:keys [db]} [_ article]]
-    {:db         (assoc-in db [:pending-requests :delete-article! article] :pending)
+  (fn [{:keys [db]} [_ slug]]
+    {:db         (assoc-in db [:pending-requests :delete-article! slug] :pending)
      :http-xhrio {:method          :delete
-                  :uri             (uri "articles" (:slug article))
+                  :uri             (uri "articles" slug)
                   :headers         (authorization-headers db)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success      [:delete-article-success article]
-                  :on-failure      [:api-request-failure :delete-article! article]}}))
+                  :on-success      [:delete-article-success slug]
+                  :on-failure      [:api-request-failure :delete-article! slug]}}))
 
 (reg-event-db
   :delete-article-success
@@ -258,25 +258,39 @@
 
 (reg-event-fx
   :favorite-article!
-  (fn [{:keys [db]} [_ article]]
-    {:db         (assoc-in db [:pending-requests :favorite-article! article] :pending)
+  (fn [{:keys [db]} [_ slug]]
+    {:db         (assoc-in db [:pending-requests :favorite-article! slug] :pending)
      :http-xhrio {:method          :post
-                  :uri             (uri "articles" (:slug article) "favorite")
+                  :uri             (uri "articles" slug "favorite")
                   :headers         (authorization-headers db)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success      [:favorite-article-success article]
-                  :on-failure      [:api-request-failure :favorite-article! article]}}))
+                  :on-success      [:favorite-article-success slug]
+                  :on-failure      [:api-request-failure :favorite-article! slug]}}))
+
+(reg-event-db
+  :favorite-article-success
+  (fn [db [_ slug article]]
+    (->> db
+         (assoc-in [:articles slug] article)
+         (assoc-in [:pending-requests :favorite-article! slug] false))))
 
 (reg-event-fx
   :unfavorite-article!
-  (fn [{:keys [db]} [_ article]]
-    {:db         (assoc-in db [:pending-requests :unfavorite-article! article] :pending)
+  (fn [{:keys [db]} [_ slug]]
+    {:db         (assoc-in db [:pending-requests :unfavorite-article! slug] :pending)
      :http-xhrio {:method          :delete
-                  :uri             (uri "articles" (:slug article) "favorite")
+                  :uri             (uri "articles" slug "favorite")
                   :headers         (authorization-headers db)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success      [:unfavorite-article-success article]
-                  :on-failure      [:api-request-failure :unfavorite-article! article]}}))
+                  :on-success      [:unfavorite-article-success slug]
+                  :on-failure      [:api-request-failure :unfavorite-article! slug]}}))
+
+(reg-event-db
+  :unfavorite-article-success
+  (fn [db [_ slug article]]
+    (->> db
+         (assoc-in [:articles slug] article)
+         (assoc-in [:pending-requests :unfavorite-article! slug] false))))
 
 (reg-event-fx
   :post-comment!

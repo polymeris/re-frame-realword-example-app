@@ -3,10 +3,13 @@
             [re-frame.core :as re-frame]))
 
 (defn- feed-toggle []
-  [:div.feed-toggle
-   [:ul.nav.nav-pills.outline-active
-    [:li.nav-item [:a.nav-link.disabled {:href ""} "Your Feed"]]
-    [:li.nav-item [:a.nav-link.active {:href ""} "Global Feed"]]]])
+  (let [logged-in? (re-frame/subscribe [:logged-in?])]
+    [:div.feed-toggle
+     [:ul.nav.nav-pills.outline-active
+      [:li.nav-item [:a.nav-link {:href (if @logged-in? "#/home/yours"
+                                                        "#/login")}
+                     "Your Feed"]]
+      [:li.nav-item [:a.nav-link.active {:href ""} "Global Feed"]]]]))
 
 (defn- tag-pill
   [{:keys [text]}]

@@ -30,6 +30,11 @@
     (:user db)))
 
 (reg-sub
+  :logged-in?
+  (fn [db _]
+    (some? (:user db))))
+
+(reg-sub
   :tags
   (fn [db _]
     (:tags db)))
