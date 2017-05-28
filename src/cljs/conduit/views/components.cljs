@@ -1,30 +1,5 @@
 (ns conduit.views.components)
 
-(defn article-meta
-  [{created-at                        :date
-    likes                             :likes
-    favorites-count                   :favoritesCount
-    {username :username image :image} :author}]
-  [:div.article-meta
-   [:a {:href (str "#/profile/" username)} [:img {:src image}]]
-   [:div.info
-    [:a.author {:href (str "#/profile/" username)} username]
-    [:span.date created-at]]
-   [:button.btn.btn-outline-primary.btn-sm.pull-xs-right
-    [:i.ion-heart] (str " " favorites-count) likes]])
-
-(defn article-preview
-  [{:keys [slug title description tag-list author] :as article}]
-  [:div.article-preview
-   {:key slug}
-   [article-meta article]
-   [:a.preview-link {:href (str "#/article/" slug)}
-    [:h1 title]
-    [:p description]
-    [:span "Read more..."]
-    [:ul.tag-list
-     (map #(do [:li.tag-default.tag-pill.tag-outline %]) tag-list)]]])
-
 (defn large-textarea
   [attrs]
   [:fieldset.form-group

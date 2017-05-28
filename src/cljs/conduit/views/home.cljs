@@ -1,5 +1,5 @@
 (ns conduit.views.home
-  (:require [conduit.views.components :refer [article-preview]]
+  (:require [conduit.views.article :as article]
             [re-frame.core :as re-frame]))
 
 (defn- feed-toggle []
@@ -33,6 +33,6 @@
         [:div.row
          [:div.col-md-9
           [feed-toggle]
-          (map article-preview @articles)]
+          (map article/article-preview @articles)]
          [:div.col-md-3
           [sidebar]]]]])))

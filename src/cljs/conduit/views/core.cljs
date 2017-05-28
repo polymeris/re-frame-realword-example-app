@@ -1,7 +1,7 @@
 (ns conduit.views.core
   (:require [re-frame.core :as re-frame]
-            [conduit.views.header :refer [navbar]]
-            [conduit.views.footer :refer [footer]]
+            [conduit.views.header :as header ]
+            [conduit.views.footer :as footer]
             [conduit.views.article :as article]
             [conduit.views.auth :as auth]
             [conduit.views.signup :as signup]
@@ -25,6 +25,6 @@
   (let [active-panel (re-frame/subscribe [:active-page])]
     (fn []
       [:div
-       [navbar]
+       [header/navbar]
        [page @active-panel]
-       [footer]])))
+       [footer/footer]])))

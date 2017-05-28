@@ -1,5 +1,5 @@
 (ns conduit.views.editor
-  (:require [conduit.views.components :refer [large-input textarea input error-list]]
+  (:require [conduit.views.components :as components]
             [re-frame.core :as re-frame]
             [dommy.core :refer-macros [sel1]]
             [cljsjs.react-select]
@@ -16,12 +16,12 @@
        [:div.container.page
         [:div.row
          [:div.col-md-10.offset-md-1.col-xs-12
-          [error-list @create-article-errors]
+          [components/error-list @create-article-errors]
           [:form
            [:fieldset
-            [large-input {:id "title" :placeholder "Article Title"}]
-            [input {:id "description" :placeholder "What's this article about?"}]
-            [textarea {:id "body" :placeholder "Write your article (in markdown)"}]
+            [components/large-input {:id "title" :placeholder "Article Title"}]
+            [components/input {:id "description" :placeholder "What's this article about?"}]
+            [components/textarea {:id "body" :placeholder "Write your article (in markdown)"}]
             [:fieldset.form-group
              [:> js/Select.Creatable
               {:placeholder       "Enter tags"

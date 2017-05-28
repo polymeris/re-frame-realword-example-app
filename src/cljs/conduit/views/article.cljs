@@ -1,6 +1,5 @@
 (ns conduit.views.article
-  (:require [conduit.views.components :refer [article-meta]]
-            [markdown.core :as markdown]
+  (:require [markdown.core :as markdown]
             [re-frame.core :as re-frame]))
 
 (defn- comment-card [{date :date body :body {:keys [username image]} :author}]
@@ -16,7 +15,7 @@
       [:a.comment-author {:href (str "#/profile" username)} username]
       [:span.date-posted date]
       (when mod-options
-         [:span.mod-options
+        [:span.mod-options
          [:i.ion-edit]
          [:i.ion-trash-a]])]]))
 
@@ -35,6 +34,31 @@
         [:img.comment-author-img {:src (:image @user)}]
         [:button.btn.btn-sm.btn-primary "Post Comment"]]]
       (map comment-card (:comments article))]]))
+
+(defn article-meta
+  [{created-at                        :date
+    likes                             :likes
+    favorites-count                   :favoritesCount
+    {username :username image :image} :author}]
+  [:div.article-meta
+   [:a {:href (str "#/profile/" username)} [:img {:src image}]]
+   [:div.info
+    [:a.author {:href (str "#/profile/" username)} username]
+    [:span.date created-at]]
+   [:button.btn.btn-outline-primary.btn-sm.pull-xs-right
+    [:i.ion-heart] (str " " favorites-count) likes]])
+
+(defn article-preview
+  [{:keys [slug title description tag-list author] :as article}]
+  [:div.article-preview
+   {:key slug}
+   [article-meta article]
+   [:a.preview-link {:href (str "#/article/" slug)}
+    [:h1 title]
+    [:p description]
+    [:span "Read more..."]
+    [:ul.tag-list
+     (map #(do [:li.tag-default.tag-pill.tag-outline %]) tag-list)]]])
 
 (defn page []
   (let [article (re-frame/subscribe [:active-article])]

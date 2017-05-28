@@ -1,5 +1,5 @@
 (ns conduit.views.profile
-  (:require [conduit.views.components :refer [article-preview]]
+  (:require [conduit.views.article :as article]
             [re-frame.core :as re-frame]))
 
 (defn- user-info
@@ -36,12 +36,12 @@
         [:div.row
          [:div.col-xs-12.col-md-10.offset-md-1
           [article-toggle]]
-         [article-preview {:profile {:username "esimons"
-                                     :name     "Eric Simmons"
-                                     :image    "http://i.imgur.com/Qr71crq.jpg"}
-                           :article {:likes       29
-                                     :slug        "how-to-build"
-                                     :date        "January 20th"
-                                     :title       "How to build webapps that scale"
-                                     :description "This is the description for the post."
-                                     :tag-list    ["Music" "Song"]}}]]]])))
+         [article/article-preview {:profile {:username "esimons"
+                                             :name     "Eric Simmons"
+                                             :image    "http://i.imgur.com/Qr71crq.jpg"}
+                                   :article {:likes       29
+                                             :slug        "how-to-build"
+                                             :date        "January 20th"
+                                             :title       "How to build webapps that scale"
+                                             :description "This is the description for the post."
+                                             :tag-list    ["Music" "Song"]}}]]]])))
