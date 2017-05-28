@@ -161,6 +161,7 @@
   (fn [{:keys [db]} [_ username]]
     {:http-xhrio {:method          :get
                   :uri             (uri "profiles" username)
+                  :headers         (when (:user db) (authorization-headers db))
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [:get-profile-success username]
                   :on-failure      [:api-request-failure :get-profile username]}}))
