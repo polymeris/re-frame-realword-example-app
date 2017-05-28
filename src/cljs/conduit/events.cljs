@@ -4,7 +4,7 @@
             [ajax.core :refer [json-request-format json-response-format]]
             [clojure.string :as string]
             [cljs-time.format :as f]
-            [conduit.db :as db]))
+            [akiroz.re-frame.storage :as storage]))
 
 (def base-url "https://conduit.productionready.io")
 
@@ -14,10 +14,18 @@
 (defn authorization-headers [db]
   [:Authorization (str "Token " (get-in db [:user :token]))])
 
-(reg-event-db
+(defn reg-event-db-storing-user
+  [event-id handler]
+  (reg-event-fx
+    event-id
+    [(storage/persist-db :conduit :user)]
+    (fn [{:keys [db]} event-vec]
+      {:db (handler db event-vec)})))
+
+(reg-event-db-storing-user
   :initialize-db
-  (fn [_ _]
-    db/default-db))
+  (fn [db _]
+    (or db {})))
 
 (reg-event-db
   :set-active-page
@@ -71,7 +79,7 @@
                   :on-success      [:login-success]
                   :on-failure      [:api-request-failure :login!]}}))
 
-(reg-event-db
+(reg-event-db-storing-user
   :login-success
   (fn [db [_ {user :user}]]
     (dispatch [:set-active-page :main])
@@ -81,7 +89,7 @@
         (assoc :user user))))
 
 
-(reg-event-db
+(reg-event-db-storing-user
   :logout!
   (fn [db _]
     (dispatch [:set-active-page :main])
