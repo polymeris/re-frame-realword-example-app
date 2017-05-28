@@ -215,6 +215,7 @@
     {:db         (assoc-in db [:pending-requests :get-articles] :pending)
      :http-xhrio {:method          :get
                   :uri             (uri "articles")
+                  :headers         (when (:user db) (authorization-headers db))
                   :params          params
                   :response-format (json-response-format {:keywords? true})
                   :on-success      [:get-articles-success]
@@ -225,7 +226,7 @@
   (fn [db [_ {articles :articles}]]
     (-> db
         (assoc-in [:pending-requests :get-articles] false)
-        (assoc :articles (into {} (map (juxt :slug identity) articles))))))
+        (update :articles #(merge % (into {} (map (juxt :slug identity) articles)))))))
 
 (reg-event-fx
   :create-article!
