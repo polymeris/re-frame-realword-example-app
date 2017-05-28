@@ -2,7 +2,6 @@
   (:require [markdown.core :as markdown]
             [re-frame.core :as re-frame]))
 
-; TODO favorite articles
 ; TODO delete articles
 ; TODO new comments
 ; TODO edit comment

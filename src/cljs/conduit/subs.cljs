@@ -61,7 +61,17 @@
   :articles
   (fn [db _]
     (->> (get-in db [:articles])
-         (filter-articles (:article-filters db))
+         ;(filter-articles (:article-filters db))
+         (map #(humanize-article (second %)))
+         (sort-by :createdAt)
+         (reverse)
+         (map #(dissoc % :comments)))))
+
+(reg-sub
+  :favorited-articles
+  (fn [db [_ username]]
+    (->> (get-in db [:articles])
+         (filter (fn [[_ v]] (:favorited v)))
          (map #(humanize-article (second %)))
          (map #(dissoc % :comments)))))
 

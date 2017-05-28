@@ -1,8 +1,8 @@
 (ns conduit.views.home
   (:require [conduit.views.article :as article]
-            [re-frame.core :as re-frame]))
+            [re-frame.core :as re-frame]
+            [conduit.views.components :as components]))
 
-;TODO paginate articles
 ;TODO filter by tag
 ;TODO show your feed
 
@@ -41,6 +41,8 @@
         [:div.row
          [:div.col-md-9
           [feed-toggle]
-          (map article/article-preview @articles)]
+          (map article/article-preview @articles)
+          [components/infinite-scroll
+           {:load-fn #(re-frame/dispatch [:get-articles {:offset (count @articles)}])}]]
          [:div.col-md-3
           [sidebar]]]]])))
