@@ -2,13 +2,14 @@
   (:require [conduit.views.article :as article]
             [re-frame.core :as re-frame]))
 
-; TODO follow user
 ; TODO list articles
 ; TODO list favorites
 
-(defn- user-info
-  [{:keys [image bio username follower-count]}]
-  (let [logged-in-user (re-frame/subscribe [:user])]
+(defn- profile-info
+  [{:keys [image bio username following follower-count]}]
+  (let [user (re-frame/subscribe [:user])
+        unfollow-pending (re-frame/subscribe [:request-pending :unfollow-profile! username])
+        follow-pending (re-frame/subscribe [:request-pending :follow-profile! username])]
     [:div.user-info
      [:div.container
       [:div.row
@@ -16,12 +17,15 @@
         [:img.user-img {:src image}]
         [:h4 username]
         [:p bio]
-        (when (and @logged-in-user (not= (:username @logged-in-user) username))
-          [:button.btn.btn-sm.btn-outline-secondary.action-btn
-           [:i.ion-plus-round]
-           (str " Follow " username " ")
-           ;[:span.counter (str "(" follower-count ")")]
-           ])]]]]))
+        (when (and @user (not= (:username @user) username))
+          [:button.btn.btn-sm.action-btn
+           {:class    (if following "btn-secondary" "btn-outline-secondary")
+            :on-click #(re-frame/dispatch [(if following :unfollow-profile! :follow-profile!) username])}
+           [:i {:class (cond
+                         (or @unfollow-pending @follow-pending) "ion-load-a spin-icon"
+                         (not following) "ion-plus-round"
+                         :else "ion-minus-round")}]
+           (str (if following "Unfollow " "Follow ") username)])]]]]))
 
 (defn- article-toggle []
   [:div.articles-toggle
@@ -35,7 +39,7 @@
     (fn []
       [:div.profile-page
        [:span @profile]
-       [user-info @profile]
+       [profile-info @profile]
        [:div.container
         [:div.row
          [:div.col-xs-12.col-md-10.offset-md-1
